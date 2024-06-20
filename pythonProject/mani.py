@@ -7,7 +7,6 @@ def decimal_to_binary_list(decimal_number):
     return [int(bit) for bit in bin(decimal_number)[2:]]
 
 generator_polynomials = {
-    # mamy inne generatory ale dziala
     (7, 4, 3): decimal_to_binary_list(11),
     (7, 3, 4): decimal_to_binary_list(35),
 
@@ -73,7 +72,6 @@ generator_polynomials = {
     (51, 18, 14): decimal_to_binary_list(170336760675),
     (51, 10, 18): decimal_to_binary_list(62066722733023),
 
-# Michał
     (33, 20, 6): decimal_to_binary_list(20741),
     (33, 13, 10): decimal_to_binary_list(4172741),
     (33, 12, 10): decimal_to_binary_list(14217043),
@@ -153,22 +151,17 @@ def poly_divide(dividend, divisor):
 
 
 def poly_add(bin1, bin2):
-    # Funkcja do konwersji listy binarnej na liczbę dziesiętną
     def binary_to_decimal(binary_list):
         return int(''.join(map(str, binary_list)), 2)
 
-    # Funkcja do konwersji liczby dziesiętnej na listę binarną
     def decimal_to_binary(decimal_num):
         return list(map(int, bin(decimal_num)[2:]))
 
-    # Konwersja obu liczb binarnych na liczby dziesiętne
     num1 = binary_to_decimal(bin1)
     num2 = binary_to_decimal(bin2)
 
-    # Dodawanie liczb dziesiętnych
     result_decimal = num1 + num2
 
-    # Konwersja wyniku na listę binarną
     return decimal_to_binary(result_decimal)
 
 def hamming_weight(vector):
@@ -185,7 +178,6 @@ def rotate_left(vec):
 
 def correct_and_rotate(received, syndrome, rotations):
     corrected = poly_add_decode(received, syndrome)
-    # Przesunięcie cyklicznie w lewo o liczbę wykonanych rotacji w prawo
     for _ in range(rotations):
         corrected = rotate_left(corrected)
     return corrected
@@ -200,24 +192,19 @@ def poly_add_decode(p1, p2):
 def decode_received_vector(received, generator, t):
     print("========================================================================")
     print("DEKODOWANIE")
-    # Step 1: Calculate the initial syndrome
     syndrome = poly_divide(received, generator)
     print("Syndrom: ", syndrome)
     print("Waga syndromu:", hamming_weight(syndrome))
-    # If the initial syndrome is zero, there are no errors
     if hamming_weight(syndrome) == 0:
         return received
 
-    # Step 2: Initialize variables
     i = 0
     k = len(received) - len(generator) + 1
     print("T:", t)
     print("K:", k)
     while True:
-        # Step 3: Calculate the weight of the syndrome
         weight = hamming_weight(syndrome)
 
-        # Step 4: If the weight is less than or equal to t, correct the errors
         if weight <= t:
             print("Prawo")
             corrected = poly_add_decode(received, syndrome)
@@ -226,27 +213,22 @@ def decode_received_vector(received, generator, t):
             return corrected
 
         print("Lewo")
-        # Step 5: Rotate the received vector to the right
         received = rotate_right(received)
         i += 1
         print('i ', i)
 
-        # Step 6: Calculate the new syndrome after rotation
         syndrome = poly_divide(received, generator)
 
-        # If we have rotated k times, the errors are uncorrectable
         if i == k:
-            return received  # Returning the received vector indicating uncorrectable errors
-
+            return received
+            
     print("DEKODOWANIE")
     print("========================================================================")
 
 def cyclic_encode(n, k, msg, generator):
     print("========================================================================")
     print("KODOWANIE")
-    #print(n)
     r = n - k
-    #print(r)
     msg_shifted = msg + [0] * r
     print("Przesunieta wiadomosc:", msg_shifted)
     remainder = poly_divide(msg_shifted, generator)
@@ -274,49 +256,40 @@ import random
 import math
 
 def find_generator_polynomial(n, k, d):
-    # Dummy implementation, replace with the actual implementation.
     return [1] * (n - k + 1)
 
 def cyclic_encode(n, k, msg, generator):
-    # Dummy implementation, replace with the actual implementation.
     return msg + [0] * (n - k)
 
 def introduce_errors(codedmsg, error_position):
-    # Introduce errors at specified positions
     for pos in error_position:
-        codedmsg[pos-1] ^= 1  # Flip the bit at the error position
+        codedmsg[pos-1] ^= 1
     return codedmsg
 
 def decode_received_vector(codedwitherrors, generator, t):
-    # Dummy implementation, replace with the actual implementation.
     return codedwitherrors
 
 def hamming_weight(error_position):
-    # Calculate the number of errors (Hamming weight)
     return len(error_position)
 
 import random
 import math
 
 def find_generator_polynomial(n, k, d):
-    # Dummy implementation, replace with the actual implementation.
     return [1] * (n - k + 1)
 
 def cyclic_encode(n, k, msg, generator):
-    # Dummy implementation, replace with the actual implementation.
     return msg + [0] * (n - k)
 
 def introduce_errors(encoded_msg, error_positions):
     for pos in error_positions:
-        encoded_msg[pos] ^= 1  # Use pos directly as it is already within correct range
+        encoded_msg[pos] ^= 1  
     return encoded_msg
 
 def decode_received_vector(codedwitherrors, generator, t):
-    # Dummy implementation, replace with the actual implementation.
     return codedwitherrors
 
 def hamming_weight(error_position):
-    # Calculate the number of errors (Hamming weight)
     return len(error_position)
 
 def test_decoder():
